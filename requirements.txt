@@ -1,0 +1,7 @@
+# 运行依赖
+PySide6>=6.6.0
+Pillow>=10.0.0
+
+# 系统级工具（非 Python 包，单独安装）
+# - potrace：矢量化（batch_trace 需要）
+# - FontForge：组装 ttf（build_font 需要，须用其自带 ffpython 运行）
