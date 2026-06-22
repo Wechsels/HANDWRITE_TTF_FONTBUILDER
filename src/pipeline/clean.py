@@ -43,7 +43,8 @@ def otsu_threshold(gray: Image.Image) -> int:
         if var > max_var:
             max_var = var
             threshold = i
-    return max(threshold, 1) if threshold > 0 else 128
+    # 兜底 128：避免稀疏黑字在 Otsu 阈值过低（如只画到 #10/16）时被全部判为背景。
+    return max(threshold, 128)
 
 
 def clean_one(src: Path, dst: Path, size: int, margin: int, force: bool,

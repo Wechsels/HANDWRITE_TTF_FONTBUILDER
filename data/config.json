@@ -1,6 +1,6 @@
 {
   "font_name": "我的手写体",
-  "ffpython_path": "",
+  "ffpython_path": "C:\\Program Files\\FontForgeBuilds\\bin\\ffpython.exe",
   "cols": 5,
   "rows": 2,
   "theme": "白色",
