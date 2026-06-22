@@ -37,6 +37,18 @@ python src/main.py
 
 逗号、句号等占标准字左下 1/4；分号、感叹号等占左半 1/2；省略号、破折号等占满格；小写字母占下半。规格集中在 `src/charset/metrics.py`，可调。
 
+## 许可证
+
+[![License: WNCPL v1.0](https://img.shields.io/badge/License-WNCPL%20v1.0-orange.svg)](LICENSE)
+
+本项目基于 **Wechsels 非商用许可证 v1.0 (WNCPL v1.0)** 发布。
+
+- 允许:查看、修改、非商业场景下分发
+- 禁止:任何形式的商用
+- 强制:保留版权声明与许可证副本；衍生作品必须使用本协议
+
+详情请参阅 [LICENSE](LICENSE) 文件。Copyright (c) 2026 Wechsels (hry)。
+
 ---
 
 # English
@@ -59,5 +71,17 @@ cd D:\Codex\CodeAgent\Code-04-HANDWRITE_TTF_FONTBUILDER
 pip install -r requirements.txt
 python src/main.py
 ```
+
+## License
+
+[![License: WNCPL v1.0](https://img.shields.io/badge/License-WNCPL%20v1.0-orange.svg)](LICENSE)
+
+This project is released under the **Wechsels Non-Commercial License v1.0 (WNCPL v1.0)**.
+
+- Allowed: view, modify, redistribute for non-commercial purposes
+- Prohibited: any form of commercial use
+- Required: retain copyright notice and license copy; derivative works must use this license
+
+See the [LICENSE](LICENSE) file for full terms. Copyright (c) 2026 Wechsels (hry).
 
 
