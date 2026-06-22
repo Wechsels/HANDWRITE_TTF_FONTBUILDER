@@ -1,4 +1,4 @@
-# HANDWRITE TTF FONTBUILDER
+# Handwrite TTF FontBuilder / 手写字体生成器
 
 [English](#english) ｜ 中文（默认）
 
