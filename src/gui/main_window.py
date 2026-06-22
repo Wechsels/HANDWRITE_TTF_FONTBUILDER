@@ -31,8 +31,19 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QLabel, QPushButton,
                                 QFileDialog, QDockWidget, QLineEdit)
 
 log = get_logger("main")
-BUILD_FONT_PY = Path(__file__).resolve().parents[1] / "pipeline" / "build_font.py"
 PEN_MAX = max(4.0, 220 / 30.0)
+
+
+def _build_font_path() -> Path:
+    """build_font.py 的运行期路径。
+
+    开发态：源码位置（__file__ 真实路径）。
+    onefile 冻结态：build_font.py 通过 --add-data 放进 _MEIPASS/src/pipeline/，
+    ffpython 需要真实 .py 文件（不接受 .pyc），故必须从这里取。
+    """
+    if getattr(sys, "frozen", False):
+        return Path(getattr(sys, "_MEIPASS")) / "src" / "pipeline" / "build_font.py"
+    return Path(__file__).resolve().parents[1] / "pipeline" / "build_font.py"
 
 
 class MainWindow(QMainWindow):
@@ -372,7 +383,7 @@ class MainWindow(QMainWindow):
         QApplication.processEvents()
         try:
             proc = subprocess.run(
-                [ffpython, str(BUILD_FONT_PY), "--name", name,
+                [ffpython, str(_build_font_path()), "--name", name,
                  "--out-dir", str(FONT_DIR)],
                 capture_output=True, text=True,
                 encoding="utf-8", errors="replace")
