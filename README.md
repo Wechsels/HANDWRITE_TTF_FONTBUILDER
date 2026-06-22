@@ -47,7 +47,7 @@ python src/main.py
 - 禁止:任何形式的商用
 - 强制:保留版权声明与许可证副本；衍生作品必须使用本协议
 
-详情请参阅 [LICENSE](LICENSE) 文件。Copyright (c) 2026 Wechsels (hry)。
+详情请参阅 [LICENSE](LICENSE) 文件。Copyright (c) 2026 Yurui He (GitHub: Wechsels)。
 
 ---
 
@@ -82,6 +82,6 @@ This project is released under the **Wechsels Non-Commercial License v1.0 (WNCPL
 - Prohibited: any form of commercial use
 - Required: retain copyright notice and license copy; derivative works must use this license
 
-See the [LICENSE](LICENSE) file for full terms. Copyright (c) 2026 Wechsels (hry).
+See the [LICENSE](LICENSE) file for full terms. Copyright (c) 2026 Yurui He (GitHub: Wechsels).
 
 
