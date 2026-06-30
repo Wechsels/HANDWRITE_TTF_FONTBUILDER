@@ -1,7 +1,7 @@
 import { spawn, execSync } from 'child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs'
-import { join, resolve } from 'path'
-import { RAW_DIR, CLEAN_DIR, SVG_DIR, FONT_DIR, OUTPUT_DIR, BACKEND_DIR, CANVAS_SIZE, DEFAULT_MARGIN } from './paths'
+import { dirname, join } from 'path'
+import { RAW_DIR, CLEAN_DIR, SVG_DIR, FONT_DIR, OUTPUT_DIR, BACKEND_DIR, CANVAS_SIZE, DEFAULT_MARGIN, PROJECT_ROOT } from './paths'
 import { findFfpython } from './ffpython'
 
 function ensureDirs(): void {
@@ -10,8 +10,16 @@ function ensureDirs(): void {
   }
 }
 
+// Writable project root passed to the Python backend via HF_PROJECT_ROOT.
+// Must never resolve into resources/app.asar (an archive) — that breaks mkdir.
 function getProjectRoot(): string {
-  return resolve(__dirname, '..', '..')
+  return PROJECT_ROOT
+}
+
+// Parent of the backend dir, so `from backend.pipeline...` is importable as a
+// namespace package (dev: project root; packaged: resources/).
+function getBackendImportRoot(): string {
+  return dirname(BACKEND_DIR)
 }
 
 export interface GlyphResult {
@@ -108,7 +116,7 @@ export function rebuildFont(name: string, ffpythonPath: string): Promise<Rebuild
 export async function clearArtifacts(): Promise<number> {
   const cmd = execSync(
     'python -c "from backend.pipeline.cleanup import clear_artifacts; print(clear_artifacts())"',
-    { cwd: getProjectRoot(), encoding: 'utf-8' }
+    { cwd: getBackendImportRoot(), encoding: 'utf-8' }
   )
   return Number(cmd.trim())
 }

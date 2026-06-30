@@ -1,7 +1,24 @@
 import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
+import { existsSync, mkdirSync, copyFileSync } from 'fs'
 import { is } from '@electron-toolkit/utils'
 import { registerIpcHandlers } from './ipc'
+import { DEFAULT_CHARSET_PATH } from './paths'
+
+// Packaged builds ship the default charset under resources/ (via extraResources),
+// but the app reads it from userData/. Seed it on first run so it is readable.
+function seedDefaultCharset(): void {
+  if (is.dev) return
+  if (existsSync(DEFAULT_CHARSET_PATH)) return
+  const bundled = join(process.resourcesPath!, 'data', 'default_charset.txt')
+  if (!existsSync(bundled)) return
+  try {
+    mkdirSync(join(DEFAULT_CHARSET_PATH, '..'), { recursive: true })
+    copyFileSync(bundled, DEFAULT_CHARSET_PATH)
+  } catch {
+    // best-effort; loadDefault() will just yield an empty charset
+  }
+}
 
 let mainWindow: BrowserWindow | null = null
 
@@ -37,6 +54,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  seedDefaultCharset()
   registerIpcHandlers()
   createWindow()
 

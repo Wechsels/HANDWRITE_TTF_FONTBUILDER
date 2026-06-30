@@ -1,4 +1,5 @@
 import { ipcMain, dialog, BrowserWindow } from 'electron'
+import { copyFileSync, existsSync } from 'fs'
 import { loadConfig, saveConfig } from './config'
 import {
   listCustom, loadCharsetFile, loadChars, saveChars, deleteCharset,
@@ -42,6 +43,33 @@ export function registerIpcHandlers(): void {
     })
     if (result.canceled || result.filePaths.length === 0) return null
     return result.filePaths[0]
+  })
+
+  // Let the user choose where to save a generated TTF (save dialog).
+  ipcMain.handle('pick-save-ttf', async (_e, defaultName: string) => {
+    const win = BrowserWindow.getFocusedWindow()
+    if (!win) return null
+    const name = (defaultName || '字体').trim()
+    const baseName = name.toLowerCase().endsWith('.ttf') ? name : `${name}.ttf`
+    const result = await dialog.showSaveDialog(win, {
+      title: '保存 TTF 字库文件',
+      defaultPath: baseName,
+      filters: [{ name: 'TrueType Font', extensions: ['ttf'] }]
+    })
+    if (result.canceled || !result.filePath) return null
+    return result.filePath
+  })
+
+  // Copy a generated TTF from its build location to the user-chosen path.
+  ipcMain.handle('save-ttf-to', (_e, srcPath: string, destPath: string) => {
+    if (!srcPath || !destPath) return false
+    if (!existsSync(srcPath)) return false
+    try {
+      copyFileSync(srcPath, destPath)
+      return true
+    } catch {
+      return false
+    }
   })
 
   ipcMain.handle('detect-tablet', () => detectTablet())

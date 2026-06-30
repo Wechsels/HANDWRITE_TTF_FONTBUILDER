@@ -8,6 +8,7 @@ directories:
 files:
   - out/**/*
   - "!node_modules"
+  - node_modules/@electron-toolkit/utils/**/*
 extraResources:
   - from: backend
     to: backend

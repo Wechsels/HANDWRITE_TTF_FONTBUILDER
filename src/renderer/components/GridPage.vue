@@ -224,9 +224,27 @@ async function rebuildFont() {
   if (!hasApi) { emit('status','当前环境不支持重建'); return }
   const name = configStore.cfg.font_name
   try {
-    const result = await window.api.rebuildFont(name)
-    emit('status',result.ok ? `✓ 字库已重建并输出到 output/${name}.ttf` : `✗ 重建失败: ${result.info}`)
-    if (result.ok) libraryStore.refresh()
+    const result = await window.api.rebuildFont(name) as any
+    if (!result.ok) {
+      emit('status',`✗ 重建失败: ${result.info}`)
+      return
+    }
+    // Build succeeded — let the user choose where to save the TTF.
+    const ttfPath: string | undefined = result.ttfPath
+    const dest = await window.api.pickSaveTtf(name)
+    if (!dest) {
+      // 用户取消：TTF 仍在 output/ 下保留，仅提示
+      emit('status', result.info + '（未另存，文件保留在 output/ 目录）')
+      libraryStore.refresh()
+      return
+    }
+    const ok = ttfPath ? await window.api.saveTtfTo(ttfPath, dest) : false
+    if (ok) {
+      emit('status', `✓ 字库已重建并保存到 ${dest}`)
+    } else {
+      emit('status', result.info + '，但另存失败（文件保留在 output/ 目录）')
+    }
+    libraryStore.refresh()
   } catch (e: any) {
     emit('status',`重建错误: ${e.message}`)
   }

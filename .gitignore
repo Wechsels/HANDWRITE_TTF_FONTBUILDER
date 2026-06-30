@@ -53,3 +53,7 @@ wix/
 # Release artifacts
 *.zip
 Release/
+
+# Local packaging scripts (contain machine-specific paths)
+build-release.js
+build-release.ps1

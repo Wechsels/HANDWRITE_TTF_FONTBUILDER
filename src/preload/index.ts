@@ -36,6 +36,8 @@ export interface ElectronAPI {
   processGlyph: (payload: { stem: string; char: string; dataUrl: string }) => Promise<GlyphResult>
   rebuildFont: (name: string) => Promise<GlyphResult>
   pickFfpython: () => Promise<string | null>
+  pickSaveTtf: (defaultName: string) => Promise<string | null>
+  saveTtfTo: (srcPath: string, destPath: string) => Promise<boolean>
   detectTablet: () => Promise<boolean>
   detectFontforge: () => Promise<boolean>
   clearArtifacts: () => Promise<number>
@@ -57,6 +59,8 @@ const api: ElectronAPI = {
   processGlyph: (payload) => ipcRenderer.invoke('process-glyph', payload),
   rebuildFont: (name) => ipcRenderer.invoke('rebuild-font', name),
   pickFfpython: () => ipcRenderer.invoke('pick-ffpython'),
+  pickSaveTtf: (defaultName) => ipcRenderer.invoke('pick-save-ttf', defaultName),
+  saveTtfTo: (srcPath, destPath) => ipcRenderer.invoke('save-ttf-to', srcPath, destPath),
   detectTablet: () => ipcRenderer.invoke('detect-tablet'),
   detectFontforge: () => ipcRenderer.invoke('detect-fontforge'),
   clearArtifacts: () => ipcRenderer.invoke('clear-artifacts'),

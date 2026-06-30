@@ -2,9 +2,11 @@ import { app } from 'electron'
 import { join, resolve } from 'path'
 import { is } from '@electron-toolkit/utils'
 
+// Packaged: use the per-user userData dir (writable, isolated) as the project root.
+// Avoids writing under resources/app.asar (an archive) or the shared Roaming root.
 const RESOURCE_ROOT = is.dev
   ? resolve(__dirname, '..', '..')
-  : join(app.getPath('userData'), '..')
+  : app.getPath('userData')
 
 export const RESOURCE_ROOT_PATH = RESOURCE_ROOT
 export const PROJECT_ROOT = RESOURCE_ROOT
