@@ -1,0 +1,32 @@
+{
+  "name": "handwrite-ttf-fontbuilder",
+  "version": "2.0.0",
+  "description": "手写字库构建工具 — HANDWRITE TTF FONTBUILDER",
+  "main": "./out/main/index.js",
+  "author": "Wechsels",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "electron-vite build && electron-builder",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@electron-toolkit/utils": "^4.0.0",
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "pinia": "^2.3.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^3.1.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7",
+    "vue-tsc": "^2.2.2"
+  }
+}

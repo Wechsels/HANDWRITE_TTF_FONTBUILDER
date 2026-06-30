@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Runtime-generated
+logs/*
+!logs/.gitkeep
+output/*
+!output/.gitkeep
+workspace/*
+!workspace/.gitkeep
+
+# User config (local paths, etc.)
+data/config.json
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Playwright MCP
+.playwright-mcp/
+
+# Screenshots (dev artifacts)
+*.png
+*.jpg
+*.jpeg

@@ -10,17 +10,19 @@
 
 | 类型 | 依赖 | 安装 |
 |---|---|---|
+| Node.js | 18+ | — |
 | Python | 3.10+ | — |
-| Python 包 | PySide6, Pillow | `pip install -r requirements.txt` |
+| Python 包 | Pillow 等（后端） | `pip install -r backend/requirements.txt` |
+| npm 包 | Vue 3, Electron 等 | `npm install` |
 | 系统工具 | potrace（矢量化） | Windows: `scoop install potrace` / `winget install potrace`；macOS: `brew install potrace`；Linux: `apt install potrace` |
 | 系统工具 | FontForge（组装 ttf） | https://fontforge.org ，装后 `ffpython` 通常在 `C:\Program Files\FontForgeBuilds\bin\ffpython.exe` |
 
 ## 运行
 
 ```shell
-cd D:\Codex\CodeAgent\Code-04-HANDWRITE_TTF_FONTBUILDER
-pip install -r requirements.txt
-python src/main.py
+npm install
+pip install -r backend/requirements.txt
+npm run dev
 ```
 
 首次启动会自动生成默认字表（数字 / 字母 / 中英文标点 / GB2312 一级汉字，共约 3863 字）。
@@ -59,18 +61,28 @@ A desktop app: write Chinese characters / letters / punctuation in copybook cell
 
 | Type | Dependency | Install |
 |---|---|---|
+| Node.js | 18+ | — |
 | Python | 3.10+ | — |
-| Python pkgs | PySide6, Pillow | `pip install -r requirements.txt` |
+| Python pkgs | Pillow (backend) | `pip install -r backend/requirements.txt` |
+| npm pkgs | Vue 3, Electron etc. | `npm install` |
 | System tool | potrace (vectorize) | Windows: `scoop install potrace`; macOS: `brew install potrace`; Linux: `apt install potrace` |
 | System tool | FontForge (assemble ttf) | https://fontforge.org |
 
 ## Run
 
 ```shell
-cd D:\Codex\CodeAgent\Code-04-HANDWRITE_TTF_FONTBUILDER
-pip install -r requirements.txt
-python src/main.py
+npm install
+pip install -r backend/requirements.txt
+npm run dev
 ```
+
+## Usage
+
+1. Select a charset and category in the top bar; adjust columns / rows; write in cells.
+2. Click **batch submit** button to clean + vectorize; preview updates on the right.
+3. Double-click a cell to redo a character; **reset** clears intermediate files.
+4. Click **rebuild font** to generate a `.ttf` via FontForge, output to `output/`.
+5. Install the `.ttf` from `output/` to use in any application.
 
 ## License
 
