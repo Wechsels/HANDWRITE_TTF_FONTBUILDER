@@ -49,3 +49,7 @@ wix/
 *.png
 *.jpg
 *.jpeg
+
+# Release artifacts
+*.zip
+Release/
