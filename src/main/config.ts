@@ -48,9 +48,7 @@ export function loadConfig(): AppConfig {
     try {
       const data = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'))
       return normalizeConfig({ ...DEFAULT_CONFIG, ...data })
-    } catch {
-      // corrupt config, use default
-    }
+    } catch {}
   }
   return { ...DEFAULT_CONFIG }
 }

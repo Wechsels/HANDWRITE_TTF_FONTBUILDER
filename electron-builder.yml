@@ -1,6 +1,7 @@
 appId: com.wechsels.handwrite-fontbuilder
 productName: 手写字库构建工具
 copyright: Copyright © 2024 Wechsels
+electronDist: node_modules/electron/dist
 directories:
   output: dist
   buildResources: icon

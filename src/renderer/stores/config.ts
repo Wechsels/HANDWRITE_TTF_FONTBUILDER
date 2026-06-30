@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import { applyTheme } from '../lib/themes'
-import type { AppConfig } from '../../../preload'
+import type { AppConfig } from '../../preload'
 
 export type { AppConfig }
 

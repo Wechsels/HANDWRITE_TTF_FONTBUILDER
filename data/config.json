@@ -1,8 +1,8 @@
 {
   "font_name": "我的手写体",
   "ffpython_path": "C:\\Program Files\\FontForgeBuilds\\bin\\ffpython.exe",
-  "cols": 5,
-  "rows": 2,
+  "cols": 6,
+  "rows": 3,
   "theme": "白色",
   "guide_font": "KaiTi",
   "active_charset": "默认字库",

@@ -1,6 +1,3 @@
-import type { GlyphSpec } from './metrics'
-import { _SPECS, _DEFAULT } from './metrics'
-
 export const ALL = '全部'
 export const DIGIT = '数字'
 export const UPPER = '大写字母'
@@ -45,11 +42,8 @@ export function filterByCategory(charset: [string, string][], category: string):
   return charset.filter(([, ch]) => classify(ch) === category)
 }
 
-const _QUARTER_CODES = [0xFF0C, 0x3002, 0x3001]
-const _HALF_CODES = [0xFF1B, 0xFF01, 0xFF1F, 0xFF1A]
-
-const _QUARTER_SET = new Set(_QUARTER_CODES.map(c => String.fromCodePoint(c)))
-const _HALF_SET = new Set(_HALF_CODES.map(c => String.fromCodePoint(c)))
+const _QUARTER_SET = new Set([0xFF0C, 0x3002, 0x3001].map(c => String.fromCodePoint(c)))
+const _HALF_SET = new Set([0xFF1B, 0xFF01, 0xFF1F, 0xFF1A].map(c => String.fromCodePoint(c)))
 
 export function classifyChar(ch: string, baseCat: string): string {
   if (baseCat === CN_PUNCT) {
@@ -58,8 +52,4 @@ export function classifyChar(ch: string, baseCat: string): string {
     return '中标点-满格'
   }
   return baseCat
-}
-
-export function specFor(ch: string, baseCat: string): GlyphSpec {
-  return _SPECS[classifyChar(ch, baseCat)] || _DEFAULT
 }

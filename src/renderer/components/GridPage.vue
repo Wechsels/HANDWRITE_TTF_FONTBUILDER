@@ -51,7 +51,7 @@ import { theme as getTheme } from '../lib/themes'
 import CopybookCell from './CopybookCell.vue'
 
 const CELL_SIZE = 220
-const PEN_MAX = Math.max(4, CELL_SIZE / 30)
+const PEN_MAX = CELL_SIZE / 30
 
 const configStore = useConfigStore()
 const charsetStore = useCharsetStore()
@@ -97,7 +97,7 @@ function onCellSelect(idx: number) {
   selectedIndex.value = idx
   const item = charsetStore.filtered[idx]
   if (item) {
-    emitStatus(`已选中 ${item[1]} (${item[0]})`)
+    emit('status',`已选中 ${item[1]} (${item[0]})`)
   }
 }
 
@@ -111,11 +111,10 @@ function onCellRewrite(idx: number) {
   cellRefs.get(localIdx)?.clearStrokes()
   strokesCache.delete(item[0])
   charsetStore.unmarkDone(item[0])
-  emitStatus(`已清空 ${item[1]}，请重写后点"提交选中格"。`)
+  emit('status',`已清空 ${item[1]}，请重写后点"提交选中格"。`)
 }
 
 const emit = defineEmits<{ status: [msg: string] }>()
-const emitStatus = (msg: string) => emit('status', msg)
 
 function gotoPrev() {
   pageStart.value = Math.max(0, pageStart.value - pageSize.value)
@@ -132,7 +131,7 @@ function gotoNext() {
 
 function gotoFirstUndone() {
   const items = charsetStore.filtered
-  const doneSet = charsetStore.done.value
+  const doneSet = charsetStore.done
   const ps = pageSize.value
   for (let i = 0; i < items.length; i++) {
     if (!doneSet.has(items[i][0])) {
@@ -146,7 +145,7 @@ function gotoFirstUndone() {
 const hasApi = typeof window !== 'undefined' && 'api' in window
 
 async function submitPage() {
-  if (!hasApi) { emitStatus('当前环境不支持提交'); return }
+  if (!hasApi) { emit('status','当前环境不支持提交'); return }
   let ok = 0, fail = 0, skipped = 0
   const failList: string[] = []
   const ps = pageSize.value
@@ -172,13 +171,13 @@ async function submitPage() {
   let msg = `本页已提交：成功 ${ok} 字`
   if (fail) msg += `，失败 ${fail} (${failList.slice(0, 5).join(', ')})`
   if (skipped) msg += `，跳过空白 ${skipped}`
-  emitStatus(msg)
+  emit('status',msg)
   libraryStore.refresh()
 }
 
 async function submitSelected() {
-  if (!hasApi) { emitStatus('当前环境不支持提交'); return }
-  if (selectedIndex.value === null) { emitStatus('⚠ 请先点选一个格子再提交。'); return }
+  if (!hasApi) { emit('status','当前环境不支持提交'); return }
+  if (selectedIndex.value === null) { emit('status','⚠ 请先点选一个格子再提交。'); return }
   const idx = selectedIndex.value
   const cellRef = cellRefs.get(idx - pageStart.value)
   if (!cellRef) return
@@ -189,20 +188,20 @@ async function submitSelected() {
       stem: item[0], char: item[1], dataUrl: cellRef.savePng()
     })
     if (result.ok) charsetStore.markDone(item[0])
-    emitStatus(result.ok ? `✓ 已提交 ${item[1]}` : `✗ 提交失败 ${result.info}`)
+    emit('status',result.ok ? `✓ 已提交 ${item[1]}` : `✗ 提交失败 ${result.info}`)
   } catch (e: any) {
-    emitStatus(`✗ 提交错误: ${e.message}`)
+    emit('status',`✗ 提交错误: ${e.message}`)
   }
   libraryStore.refresh()
 }
 
 function rewriteSelected() {
-  if (selectedIndex.value === null) { emitStatus('⚠ 请先点选/双击一个格子再重写。'); return }
+  if (selectedIndex.value === null) { emit('status','⚠ 请先点选/双击一个格子再重写。'); return }
   onCellRewrite(selectedIndex.value)
 }
 
 async function resetLibrary() {
-  if (!hasApi) { emitStatus('当前环境不支持重置'); return }
+  if (!hasApi) { emit('status','当前环境不支持重置'); return }
   if (!confirm('将清除所有已采集手写记录与缓存(01_raw~04_font)。\n不会删除 output/ 已生成的 ttf。\n\n确定继续？')) return
   if (!confirm('再次确认：此操作不可撤销，所有采集进度将丢失！\n是否执行？')) return
   try {
@@ -215,21 +214,21 @@ async function resetLibrary() {
     libraryStore.clearThumbs()
     pageStart.value = 0
     selectedIndex.value = null
-    emitStatus(`已清空 ${removed} 个中间产物文件。`)
+    emit('status',`已清空 ${removed} 个中间产物文件。`)
   } catch (e: any) {
-    emitStatus(`重置失败: ${e.message}`)
+    emit('status',`重置失败: ${e.message}`)
   }
 }
 
 async function rebuildFont() {
-  if (!hasApi) { emitStatus('当前环境不支持重建'); return }
+  if (!hasApi) { emit('status','当前环境不支持重建'); return }
   const name = configStore.cfg.font_name
   try {
     const result = await window.api.rebuildFont(name)
-    emitStatus(result.ok ? `✓ 字库已重建并输出到 output/${name}.ttf` : `✗ 重建失败: ${result.info}`)
+    emit('status',result.ok ? `✓ 字库已重建并输出到 output/${name}.ttf` : `✗ 重建失败: ${result.info}`)
     if (result.ok) libraryStore.refresh()
   } catch (e: any) {
-    emitStatus(`重建错误: ${e.message}`)
+    emit('status',`重建错误: ${e.message}`)
   }
 }
 
@@ -241,6 +240,6 @@ watch([() => configStore.cfg.cols, () => configStore.cfg.rows], () => {
 defineExpose({
   gotoPrev, gotoNext, gotoFirstUndone,
   submitPage, submitSelected, rewriteSelected,
-  resetLibrary, rebuildFont, emitStatus
+  resetLibrary, rebuildFont
 })
 </script>

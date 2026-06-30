@@ -1,3 +1,0 @@
-# 打包构建依赖
-pyinstaller>=6.0
-Pillow>=10.0.0

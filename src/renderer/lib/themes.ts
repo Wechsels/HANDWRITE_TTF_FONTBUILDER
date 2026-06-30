@@ -23,9 +23,6 @@ export const THEMES: Record<string, Theme> = {
   }
 }
 
-// Legacy alias — prefer THEMES
-export const THEME_LIGHT = THEMES['白色']
-
 export function theme(name: string): Theme {
   return THEMES[name] || THEMES['白色']
 }

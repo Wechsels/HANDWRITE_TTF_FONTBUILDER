@@ -15,7 +15,3 @@ export const SPECS: Record<string, GlyphSpec> = {
 }
 
 export const DEFAULT_SPEC: GlyphSpec = { region: [0.04, 0.04, 0.96, 0.96], advance: 1.0 }
-
-// Legacy aliases for backward compatibility
-export const _SPECS = SPECS
-export const _DEFAULT = DEFAULT_SPEC

@@ -2,14 +2,13 @@ import { ipcMain, dialog, BrowserWindow } from 'electron'
 import { loadConfig, saveConfig } from './config'
 import {
   listCustom, loadCharsetFile, loadChars, saveChars, deleteCharset,
-  scanDone, CHARSET_CATEGORIES, filterByCategory, pathFor, DEFAULT_NAME
+  scanDone, pathFor, DEFAULT_NAME
 } from './charset'
 import { findFfpython } from './ffpython'
 import { detectTablet, detectFontforge } from './checks'
 import { processGlyph, rebuildFont, clearArtifacts, previewThumbnails } from './pipeline'
 import { DEFAULT_CHARSET_PATH } from './paths'
 
-/** Register all main-process IPC handlers. */
 export function registerIpcHandlers(): void {
   // ── Config ──
   ipcMain.handle('get-config', () => loadConfig())

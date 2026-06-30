@@ -19,7 +19,7 @@
 import { ref, onMounted, watch, nextTick } from 'vue'
 import type { Theme } from '../lib/themes'
 import { classifyChar, classify as baseClassify } from '../lib/classify'
-import { _SPECS, _DEFAULT } from '../lib/metrics'
+import { SPECS, DEFAULT_SPEC } from '../lib/metrics'
 
 const props = defineProps<{
   stem: string
@@ -62,12 +62,10 @@ function initCanvases() {
   }
   guideCtx = guideCanvas.value!.getContext('2d')!
   strokeCtx = strokeCanvas.value!.getContext('2d')!
-  // Scale so we draw in CSS pixel coordinates
   strokeCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
   guideCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
   renderGuide()
   if (props.savedStrokes) {
-    // savedStrokes was captured at physical pixel size, restore without transform
     strokeCtx.setTransform(1, 0, 0, 1, 0, 0)
     strokeCtx.putImageData(props.savedStrokes, 0, 0)
     strokeCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -78,25 +76,21 @@ function renderGuide() {
   if (!guideCtx) return
   const size = props.cellSize
   const ctx = guideCtx
-  // ctx already has setTransform(dpr,...) so we draw in CSS pixel space
   ctx.clearRect(0, 0, size, size)
 
-  // bg
   ctx.fillStyle = props.theme.bg
   ctx.fillRect(0, 0, size, size)
 
-  // guide char
   ctx.fillStyle = props.theme.guideChar
   ctx.font = `${size * 0.55}px ${props.guideFont || 'SimHei'}`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillText(props.char, size / 2, size / 2)
 
-  // region box
   if (props.char) {
     const baseCat = baseClassify(props.char)
     const cat = classifyChar(props.char, baseCat)
-    const spec = _SPECS[cat] || _DEFAULT
+    const spec = SPECS[cat] || DEFAULT_SPEC
     if (spec) {
       const [rx0, ry0, rx1, ry1] = spec.region
       ctx.strokeStyle = props.theme.accent
@@ -107,7 +101,6 @@ function renderGuide() {
     }
   }
 
-  // mi grid (米字格)
   ctx.strokeStyle = props.theme.guideLine
   ctx.lineWidth = 1
   ctx.setLineDash([3, 3])
@@ -174,7 +167,6 @@ function onPointerUp(e: PointerEvent) {
   if (!moved) {
     emit('select')
   } else {
-    // Save current strokes to cache so they persist across row/col changes
     saveCurrentStrokes()
   }
 }
@@ -182,7 +174,6 @@ function onPointerUp(e: PointerEvent) {
 function isBlank(): boolean {
   if (!strokeCtx) return true
   const size = props.cellSize
-  // getImageData uses device pixels, need to read at physical size
   const physW = Math.round(size * dpr)
   const physH = Math.round(size * dpr)
   const imgData = strokeCtx.getImageData(0, 0, physW, physH)
@@ -237,7 +228,6 @@ onMounted(() => {
 watch(() => props.savedStrokes, (data) => {
   if (!strokeCtx) return
   const size = props.cellSize
-  // Only restore if data changed and canvas doesn't match - avoid circular update
   if (data) {
     strokeCtx.setTransform(1, 0, 0, 1, 0, 0)
     strokeCtx.putImageData(data, 0, 0)

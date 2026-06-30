@@ -2,9 +2,6 @@ import { app } from 'electron'
 import { join, resolve } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-// In dev, paths resolve relative to the project root.
-// In production, they resolve relative to app data or process.resourcesPath.
-
 const RESOURCE_ROOT = is.dev
   ? resolve(__dirname, '..', '..')
   : join(app.getPath('userData'), '..')

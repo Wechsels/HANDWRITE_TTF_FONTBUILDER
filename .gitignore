@@ -42,6 +42,9 @@ desktop.ini
 # Playwright MCP
 .playwright-mcp/
 
+# WiX installer intermediates
+wix/
+
 # Screenshots (dev artifacts)
 *.png
 *.jpg
